@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @BindView(R.id.output)
     EditText mOutputArea;
+    private int sampleCount = 0;
 
     Context theContext;
 
@@ -59,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         Dexter.initialize(this);
+
+
 
 
     }
@@ -118,8 +121,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             File gpxfile = new File(root, sFileName);
             FileWriter writer = new FileWriter(gpxfile);
             for (String sBody : mData) {
-                writer.append(sBody);
-                writer.append('\n');
+                writer.append(sBody+"\n");
+                //writer.append('\n');
             }
             writer.flush();
             writer.close();
@@ -144,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 if (report.areAllPermissionsGranted()) {
                     //final Calendar t = Calendar.getInstance();
                     SpecialDate sd = new SpecialDate();
-                    String fileName = sd.getDayForNewsPresentation() + ".txt";
+                    String fileName = "Sample #"+sampleCount++ + ".txt";
                     generateNoteOnSD(fileName, mData);
                 }
             }
