@@ -27,8 +27,8 @@
             android:scrollbarStyle="insideInset"
             android:scrollbars="vertical"
             android:lines="18"
-            android:clickable="false"
-            android:enabled="false"
+            android:textSize="12dp"
+
             android:scrollHorizontally="false"/>
     </android.support.v7.widget.CardView>
 
@@ -48,5 +48,15 @@
         android:text="Stop Sampling"
         android:layout_margin="10dp"
         android:background="@color/colorAccent"
+        android:layout_weight="0.4"/>
+
+    <Button
+        android:id="@+id/finish_sampling"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="Finish Sampling Session"
+        android:layout_margin="10dp"
+        android:background="#e62525"
+        android:textColor="#fff"
         android:layout_weight="0.4"/>
 </LinearLayout>

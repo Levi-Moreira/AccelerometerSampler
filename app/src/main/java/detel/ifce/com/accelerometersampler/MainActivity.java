@@ -39,12 +39,20 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private Sensor senAccelerometer;
     private long lastUpdate;
     private boolean mSampleOn = false;
-    private ArrayList<String> mData = new ArrayList<>();
-    private float [] gravity = new float[3];
+    private ArrayList<String> mDataX = new ArrayList<>();
+    private ArrayList<String> mDataY = new ArrayList<>();
+    private ArrayList<String> mDataZ = new ArrayList<>();
+
+    private ArrayList<String> mDataFinalX = new ArrayList<>();
+    private ArrayList<String> mDataFinalY = new ArrayList<>();
+    private ArrayList<String> mDataFinalZ = new ArrayList<>();
+
+    private float[] gravity = new float[3];
 
     @BindView(R.id.output)
     EditText mOutputArea;
     private int sampleCount = 0;
+    private int sessionCOunt = 0;
 
     Context theContext;
 
@@ -60,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         Dexter.initialize(this);
-
-
 
 
     }
@@ -90,7 +96,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 long diffTime = (curTime - lastUpdate);
                 lastUpdate = curTime;
                 if (mSampleOn) {
-                    mData.add(x + "," + y + "," + z);
+                    mDataX.add(x + ",");
+                    mDataY.add(y + ",");
+                    mDataZ.add(z + ",");
                     mOutputArea.append(x + "," + y + "," + z + "\n");
                 }
             }
@@ -112,15 +120,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
     }
 
-    public void generateNoteOnSD(String sFileName, ArrayList<String> mData) {
+    public void generateNoteOnSD(String sFileName, ArrayList<String> mDataX, ArrayList<String> mDataY, ArrayList<String> mDataZ) {
         try {
+
+            //saving x
             File root = new File(Environment.getExternalStorageDirectory(), "Notes");
             if (!root.exists()) {
                 root.mkdirs();
             }
-            File gpxfile = new File(root, sFileName);
+
+            File gpxfile = new File(root,"X"+sFileName);
             FileWriter writer = new FileWriter(gpxfile);
-            for (String sBody : mData) {
+            for (String sBody : mDataX) {
+                writer.append(sBody+"\n");
+            }
+            writer.flush();
+            writer.close();
+
+
+            //saving y
+
+            File gpyfile = new File(root, "Y"+sFileName);
+            writer = new FileWriter(gpyfile);
+            for (String sBody : mDataY) {
+                writer.append(sBody+"\n");
+                //writer.append('\n');
+            }
+            writer.flush();
+            writer.close();
+
+
+
+            //saving z
+            File gpzfile = new File(root, "Z"+sFileName);
+            writer = new FileWriter(gpzfile);
+            for (String sBody : mDataZ) {
                 writer.append(sBody+"\n");
                 //writer.append('\n');
             }
@@ -134,21 +168,52 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @OnClick(R.id.start_sampling)
     public void startSamplingBtn() {
-        mOutputArea.setText("");
+        mDataX.clear();
+        mDataY.clear();
+        mDataZ.clear();
         mSampleOn = true;
     }
+
 
     @OnClick(R.id.stop_sampling)
     public void stopSamplingBtn() {
         mSampleOn = false;
+        String X = "";
+        String Y = "";
+        String Z = "";
+
+        for (String sBody : mDataX) {
+            X=X+sBody;
+        }
+
+        for (String sBody : mDataY) {
+            Y=Y+sBody;
+        }
+
+        for (String sBody : mDataZ) {
+            Z=Z+sBody;
+        }
+
+
+        mDataFinalX.add(X);
+        mDataFinalY.add(Y);
+        mDataFinalZ.add(Z);
+        mOutputArea.append("\nSample#"+sampleCount++ +"******\n");
+    }
+    @OnClick(R.id.finish_sampling)
+    public void finishSamplingBtn() {
         Dexter.checkPermissionsOnSameThread(new MultiplePermissionsListener() {
             @Override
             public void onPermissionsChecked(MultiplePermissionsReport report) {
                 if (report.areAllPermissionsGranted()) {
                     //final Calendar t = Calendar.getInstance();
-                    SpecialDate sd = new SpecialDate();
-                    String fileName = "Sample #"+sampleCount++ + ".txt";
-                    generateNoteOnSD(fileName, mData);
+                    mOutputArea.append("\nSession#"+sessionCOunt+"-------------------------------------");
+                    String fileName = "Sample Session#" + sessionCOunt++ + ".csv";
+                    generateNoteOnSD(fileName, mDataFinalX, mDataFinalY, mDataFinalZ);
+                    mDataFinalX.clear();
+                    mDataFinalY.clear();
+                    mDataFinalZ.clear();
+
                 }
             }
 
