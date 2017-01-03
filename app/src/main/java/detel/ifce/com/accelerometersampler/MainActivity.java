@@ -51,8 +51,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     @BindView(R.id.output)
     EditText mOutputArea;
-    private int sampleCount = 0;
-    private int sessionCOunt = 0;
+    private int sampleCount = 1;
+    private int sessionCOunt = 1;
 
     Context theContext;
 
@@ -171,7 +171,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mDataX.clear();
         mDataY.clear();
         mDataZ.clear();
+        mOutputArea.append("\nSample#"+sampleCount++ +"******\n");
         mSampleOn = true;
+
     }
 
 
@@ -198,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mDataFinalX.add(X);
         mDataFinalY.add(Y);
         mDataFinalZ.add(Z);
-        mOutputArea.append("\nSample#"+sampleCount++ +"******\n");
+
     }
     @OnClick(R.id.finish_sampling)
     public void finishSamplingBtn() {
@@ -207,7 +209,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
             public void onPermissionsChecked(MultiplePermissionsReport report) {
                 if (report.areAllPermissionsGranted()) {
                     //final Calendar t = Calendar.getInstance();
-                    mOutputArea.append("\nSession#"+sessionCOunt+"-------------------------------------");
+                    mOutputArea.append("\n-------------------------------------SESSION#"+sessionCOunt+"-------------------------------------");
                     String fileName = "Sample Session#" + sessionCOunt++ + ".csv";
                     generateNoteOnSD(fileName, mDataFinalX, mDataFinalY, mDataFinalZ);
                     mDataFinalX.clear();
