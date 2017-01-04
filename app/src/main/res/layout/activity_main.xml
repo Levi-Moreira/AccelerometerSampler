@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -11,51 +11,67 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="detel.ifce.com.accelerometersampler.MainActivity">
 
-    <android.support.v7.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="0.2">
-
-        <EditText
-            android:id="@+id/output"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@null"
-            android:gravity="top|left"
-            android:inputType="textMultiLine"
-            android:overScrollMode="always"
-            android:scrollbarStyle="insideInset"
-            android:scrollbars="vertical"
-            android:lines="18"
-            android:textSize="12dp"
-            android:scrollHorizontally="false"/>
-    </android.support.v7.widget.CardView>
-
     <Button
         android:id="@+id/start_sampling"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Start Sampling"
-        android:background="@color/colorAccent"
+        android:layout_height="wrap_content"
         android:layout_margin="10dp"
-        android:layout_weight="0.4"/>
+        android:layout_weight="0.4"
+        android:background="@color/colorAccent"
+        android:padding="5dp"
+        android:text="Start Sampling" />
 
     <Button
         android:id="@+id/stop_sampling"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Stop Sampling"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/start_sampling"
         android:layout_margin="10dp"
+        android:layout_weight="0.4"
         android:background="@color/colorAccent"
-        android:layout_weight="0.4"/>
+        android:padding="5dp"
+        android:text="Stop Sampling" />
 
     <Button
         android:id="@+id/finish_sampling"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Finish Sampling Session"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/stop_sampling"
         android:layout_margin="10dp"
+        android:layout_weight="0.4"
         android:background="#e62525"
-        android:textColor="#fff"
-        android:layout_weight="0.4"/>
-</LinearLayout>
+        android:padding="5dp"
+        android:text="Finish Sampling Session"
+        android:textColor="#fff" />
+
+    <Button
+        android:id="@+id/restart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/finish_sampling"
+        android:layout_margin="10dp"
+        android:layout_weight="0.4"
+        android:background="#8f0707"
+        android:padding="5dp"
+        android:text="Restart"
+        android:textColor="#fff" />
+
+
+
+
+    <EditText
+        android:id="@+id/output"
+        android:layout_below="@id/restart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1.0"
+        android:lines="18"
+        android:overScrollMode="always"
+        android:scrollHorizontally="false"
+        android:scrollbarStyle="insideInset"
+        android:scrollbars="vertical"
+        android:textSize="12dp" />
+
+
+
+</RelativeLayout>

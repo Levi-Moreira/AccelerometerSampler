@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.karumi.dexter.Dexter;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     private float[] gravity = new float[3];
 
     @BindView(R.id.output)
-    EditText mOutputArea;
+    TextView mOutputArea;
     private int sampleCount = 1;
     private int sessionCOunt = 1;
 
@@ -224,6 +225,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 token.continuePermissionRequest();
             }
         }, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+
+    }
+
+    @OnClick(R.id.restart)
+    public void restart()
+    {
+        sessionCOunt =1;
+        sampleCount = 1;
+
+        mSampleOn = false;
+        mDataFinalX.clear();
+        mDataFinalY.clear();
+        mDataFinalZ.clear();
+
+        mDataX.clear();
+        mDataY.clear();
+        mDataZ.clear();
+
+        mOutputArea.setText("");
 
     }
 }
