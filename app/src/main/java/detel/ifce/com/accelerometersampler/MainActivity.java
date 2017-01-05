@@ -10,6 +10,7 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -67,7 +68,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         senSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         senAccelerometer = senSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+        senSensorManager.registerListener(this, senAccelerometer, SensorManager.SENSOR_DELAY_FASTEST);
         Dexter.initialize(this);
 
 
@@ -79,29 +80,29 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         if (mySensor.getType() == Sensor.TYPE_ACCELEROMETER) {
 
-            final float alpha = 0.8f;
-
-
-            gravity[0] = alpha * gravity[0] + (1 - alpha) * sensorEvent.values[0];
-            gravity[1] = alpha * gravity[1] + (1 - alpha) * sensorEvent.values[1];
-            gravity[2] = alpha * gravity[2] + (1 - alpha) * sensorEvent.values[2];
-
-            float x = sensorEvent.values[0] - gravity[0];
-            float y = sensorEvent.values[1] - gravity[1];
-            float z = sensorEvent.values[2] - gravity[2];
-
             long curTime = System.currentTimeMillis();
 
+            if ((curTime - lastUpdate) > 20) {
 
-            if ((curTime - lastUpdate) > 40) {
+                float x = sensorEvent.values[0];
+                float y = sensorEvent.values[1];
+                float z = sensorEvent.values[2];
+
                 long diffTime = (curTime - lastUpdate);
+                Log.d("Accelerometer",diffTime+"");
                 lastUpdate = curTime;
                 if (mSampleOn) {
                     mDataX.add(x + ",");
                     mDataY.add(y + ",");
                     mDataZ.add(z + ",");
                     mOutputArea.append(x + "," + y + "," + z + "\n");
+                    if(mDataX.size()>=99)
+                    {
+                        stopSamplingBtn();
+                    }
                 }
+
+
             }
         }
     }
